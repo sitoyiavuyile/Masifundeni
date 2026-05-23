@@ -3,23 +3,41 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Create Spatie roles
+        $roles = ['admin', 'instructor', 'student'];
+        foreach ($roles as $role) {
+            Role::firstOrCreate(['name' => $role]);
+        }
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // Admin
+        $admin = User::factory()->create([
+            'name'  => 'Admin User',
+            'email' => 'admin@sms.test',
+            'role'  => 'admin',
         ]);
+        $admin->assignRole('admin');
+
+        // Instructor
+        $instructor = User::factory()->create([
+            'name'  => 'Jane Instructor',
+            'email' => 'instructor@sms.test',
+            'role'  => 'instructor',
+        ]);
+        $instructor->assignRole('instructor');
+
+        // Student
+        $student = User::factory()->create([
+            'name'  => 'John Student',
+            'email' => 'student@sms.test',
+            'role'  => 'student',
+        ]);
+        $student->assignRole('student');
     }
 }
