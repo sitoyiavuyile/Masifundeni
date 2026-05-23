@@ -18,5 +18,10 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Course::class, CoursePolicy::class);
         Gate::policy(Enrolment::class, EnrolmentPolicy::class);
         Gate::policy(User::class, StudentPolicy::class);
+
+        Gate::define('access-admin-panel', function (User $user) {
+            return $user->isAdmin();
+        });
     }
+    
 }
