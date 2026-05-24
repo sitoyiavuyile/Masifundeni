@@ -10,6 +10,7 @@ use App\Policies\EnrolmentPolicy;
 use App\Policies\StudentPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Route;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,6 +22,12 @@ class AppServiceProvider extends ServiceProvider
 
         Gate::define('access-admin-panel', function (User $user) {
             return $user->isAdmin();
+        });
+
+        Route::bind('student', function ($value) {
+            return \App\Models\User::where('id', $value)
+                ->where('role', 'student')
+                ->firstOrFail();
         });
     }
     
