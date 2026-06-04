@@ -15,7 +15,7 @@ class EnsureStudent
      */
      public function handle(Request $request, Closure $next): Response
     {
-        if (! auth()->check() || ! auth()->user()->isInstructor()) {
+        if (! auth()->check() || ! auth()->user()->isStudent()) {
             abort(403, 'Access denied.');
         }
 

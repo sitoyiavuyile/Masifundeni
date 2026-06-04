@@ -9,6 +9,6 @@ class DashboardController extends Controller
 {
     public function index()
 {
-    return view('student dashboard'); // temporary — we'll build real dashboards later
+    return view('student.dashboard'); // temporary — we'll build real dashboards later
 }
 }
