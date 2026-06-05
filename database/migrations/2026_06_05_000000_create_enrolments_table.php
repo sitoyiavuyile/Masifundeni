@@ -6,24 +6,27 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
         Schema::create('enrolments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')       // student
-                  ->constrained()
+            $table->foreignId('student_id')
+                  ->constrained('users')
                   ->cascadeOnDelete();
             $table->foreignId('course_id')
                   ->constrained()
                   ->cascadeOnDelete();
             $table->enum('status', ['pending', 'active', 'completed', 'dropped'])
                   ->default('pending');
-            $table->decimal('grade', 5, 2)->nullable();  // e.g. 78.50
             $table->timestamp('enrolled_at')->nullable();
+            $table->timestamp('completed_at')->nullable();
             $table->timestamps();
 
             // A student can only enrol in a course once
-            $table->unique(['user_id', 'course_id']);
+            $table->unique(['student_id', 'course_id']);
         });
     }
 

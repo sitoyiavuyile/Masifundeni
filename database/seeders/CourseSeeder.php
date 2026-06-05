@@ -54,7 +54,7 @@ class CourseSeeder extends Seeder
         foreach ($courses as $data) {
             Course::firstOrCreate(
                 ['code' => $data['code']],
-                array_merge($data, ['user_id' => $instructor->id])
+                array_merge($data, ['instructor_id' => $instructor->id])
             );
         }
 
@@ -74,7 +74,7 @@ class CourseSeeder extends Seeder
             $publishedCourses->random(min(rand(2, 3), $publishedCourses->count()))
                 ->each(function (Course $course) use ($student) {
                     Enrolment::firstOrCreate(
-                        ['user_id' => $student->id, 'course_id' => $course->id],
+                        ['student_id' => $student->id, 'course_id' => $course->id],
                         ['status' => 'active', 'enrolled_at' => now()]
                     );
                 });

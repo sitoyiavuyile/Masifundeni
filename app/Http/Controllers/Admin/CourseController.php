@@ -13,66 +13,51 @@ use Illuminate\View\View;
 class CourseController extends Controller
 {
     /** GET /admin/courses */
-    public function index(): View
+    public function index()
     {
-        $courses = Course::with('instructor')
-            ->latest()
-            ->paginate(15);
-
+        $courses = Course::with('instructor')->latest()->paginate(15);
         return view('admin.courses.index', compact('courses'));
     }
 
-    /** GET /admin/courses/create */
-    public function create(): View
+    public function create()
     {
-        $instructors = User::where('role', 'instructor')->orderBy('name')->get();
-
+        $instructors = User::where('role', 'instructor')->get();
         return view('admin.courses.create', compact('instructors'));
     }
 
-    /** POST /admin/courses */
-    public function store(StoreCourseRequest $request): RedirectResponse
+    public function store(StoreCourseRequest $request)
     {
-        $course = Course::create($request->validated());
+        Course::create([
+            'instructor_id' => $request->instructor_id,
+            'title'         => $request->title,
+            'description'   => $request->description,
+            'status'        => $request->status,
+        ]);
 
-        return redirect()
-            ->route('admin.courses.show', $course)
-            ->with('success', 'Course created successfully.');
+        return redirect()->route('admin.courses.index')->with('success', 'Course created.');
     }
 
-    /** GET /admin/courses/{course} */
-    public function show(Course $course): View
+    public function edit(Course $course)
     {
-        $course->load(['instructor', 'enrolments.student']);
-
-        return view('admin.courses.show', compact('course'));
-    }
-
-    /** GET /admin/courses/{course}/edit */
-    public function edit(Course $course): View
-    {
-        $instructors = User::where('role', 'instructor')->orderBy('name')->get();
-
+        $instructors = User::where('role', 'instructor')->get();
         return view('admin.courses.edit', compact('course', 'instructors'));
     }
 
-    /** PUT /admin/courses/{course} */
-    public function update(UpdateCourseRequest $request, Course $course): RedirectResponse
+    public function update(UpdateCourseRequest $request, Course $course)
     {
-        $course->update($request->validated());
-
-        return redirect()
-            ->route('admin.courses.show', $course)
-            ->with('success', 'Course updated.');
+        $course->update($request->validated() + ['instructor_id' => $request->instructor_id]);
+        return redirect()->route('admin.courses.index')->with('success', 'Course updated.');
     }
 
-    /** DELETE /admin/courses/{course} */
-    public function destroy(Course $course): RedirectResponse
+    public function destroy(Course $course)
     {
         $course->delete();
+        return redirect()->route('admin.courses.index')->with('success', 'Course deleted.');
+    }
 
-        return redirect()
-            ->route('admin.courses.index')
-            ->with('success', 'Course deleted.');
+    public function show(Course $course)
+    {
+        $course->load('instructor', 'enrolments.student');
+        return view('admin.courses.show', compact('course'));
     }
 }

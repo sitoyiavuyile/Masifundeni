@@ -14,7 +14,7 @@ class EnrolmentFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id'     => User::factory(),
+            'student_id'     => User::factory(),
             'course_id'   => Course::factory(),
             'status'      => $this->faker->randomElement(['pending', 'active', 'completed', 'dropped']),
             'grade'       => null,

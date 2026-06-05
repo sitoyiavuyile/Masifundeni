@@ -11,13 +11,10 @@ use Illuminate\View\View;
 
 class EnrolmentController extends Controller
 {
-    /**
-     * GET /instructor/courses/{course}/enrolments
-     * List all students enrolled in a course.
-     */
-    public function index(Course $course): View
+    // List enrolments for a course
+    public function index(Course $course)
     {
-        $this->authorize('viewAny', [Enrolment::class, $course]);
+        $this->authorize('view', $course);
 
         $enrolments = $course->enrolments()
             ->with('student')
@@ -27,60 +24,22 @@ class EnrolmentController extends Controller
         return view('instructor.enrolments.index', compact('course', 'enrolments'));
     }
 
-    /**
-     * GET /instructor/enrolments/{enrolment}
-     * Show a single enrolment record (shallow).
-     */
-    public function show(Enrolment $enrolment): View
+    // Update enrolment status (approve, complete, drop)
+    public function update(UpdateEnrolmentRequest $request, Enrolment $enrolment)
     {
-        $this->authorize('view', $enrolment);
+        // $this->authorize() call can now be removed — authorize() in the request handles it
+        $enrolment->update(['status' => $request->status]);
 
-        $enrolment->load(['student', 'course']);
-
-        return view('instructor.enrolments.show', compact('enrolment'));
+        return back()->with('success', 'Enrolment updated.');
     }
 
-    /**
-     * GET /instructor/enrolments/{enrolment}/edit
-     * Form to update grade / status.
-     */
-    public function edit(Enrolment $enrolment): View
-    {
-        $this->authorize('update', $enrolment);
-
-        $enrolment->load(['student', 'course']);
-
-        return view('instructor.enrolments.edit', compact('enrolment'));
-    }
-
-    /**
-     * PUT /instructor/enrolments/{enrolment}
-     * Update grade and/or status.
-     */
-    public function update(UpdateEnrolmentRequest $request, Enrolment $enrolment): RedirectResponse
-    {
-        $this->authorize('update', $enrolment);
-
-        $enrolment->update($request->validated());
-
-        return redirect()
-            ->route('instructor.courses.enrolments.index', $enrolment->course_id)
-            ->with('success', 'Enrolment updated.');
-    }
-
-    /**
-     * DELETE /instructor/enrolments/{enrolment}
-     * Remove a student from the course.
-     */
-    public function destroy(Enrolment $enrolment): RedirectResponse
+    // Instructor removes a student from a course
+    public function destroy(Enrolment $enrolment)
     {
         $this->authorize('delete', $enrolment);
 
-        $courseId = $enrolment->course_id;
         $enrolment->delete();
 
-        return redirect()
-            ->route('instructor.courses.enrolments.index', $courseId)
-            ->with('success', 'Student removed from course.');
+        return back()->with('success', 'Student removed from course.');
     }
 }

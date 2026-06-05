@@ -12,7 +12,7 @@ use Illuminate\View\View;
 class CourseController extends Controller
 {
     /** GET /instructor/courses */
-    public function index(): View
+    public function index()
     {
         $courses = Course::forInstructor(auth()->id())
             ->latest()
@@ -21,57 +21,53 @@ class CourseController extends Controller
         return view('instructor.courses.index', compact('courses'));
     }
 
-    /** GET /instructor/courses/create */
-    public function create(): View
+    public function create()
     {
         return view('instructor.courses.create');
     }
 
-    /** POST /instructor/courses */
-    public function store(StoreCourseRequest $request): RedirectResponse
+    public function store(StoreCourseRequest $request)
     {
-        $course = Course::create([
-            ...$request->validated(),
-            'user_id' => auth()->id(),
+        Course::create([
+            'instructor_id' => auth()->id(),
+            'title'         => $request->title,
+            'description'   => $request->description,
+            'status'        => $request->status,
         ]);
 
         return redirect()
-            ->route('instructor.courses.show', $course)
-            ->with('success', 'Course created successfully.');
+            ->route('instructor.courses.index')
+            ->with('success', 'Course created.');
     }
 
-    /** GET /instructor/courses/{course} */
-    public function show(Course $course): View
+    public function show(Course $course)
     {
         $this->authorize('view', $course);
 
-        $course->load(['enrolments.student']);
+        $course->load('enrolments.student');
 
         return view('instructor.courses.show', compact('course'));
     }
 
-    /** GET /instructor/courses/{course}/edit */
-    public function edit(Course $course): View
+    public function edit(Course $course)
     {
         $this->authorize('update', $course);
 
         return view('instructor.courses.edit', compact('course'));
     }
 
-    /** PUT /instructor/courses/{course} */
-    public function update(UpdateCourseRequest $request, Course $course): RedirectResponse
+    public function update(UpdateCourseRequest $request, Course $course)
     {
         $this->authorize('update', $course);
 
         $course->update($request->validated());
 
         return redirect()
-            ->route('instructor.courses.show', $course)
-            ->with('success', 'Course updated successfully.');
+            ->route('instructor.courses.index')
+            ->with('success', 'Course updated.');
     }
 
-    /** DELETE /instructor/courses/{course} */
-    public function destroy(Course $course): RedirectResponse
+    public function destroy(Course $course)
     {
         $this->authorize('delete', $course);
 

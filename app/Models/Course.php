@@ -18,6 +18,8 @@ class Course extends Model
         'slug',
         'description',
         'status',
+        'code',
+        'credits',
     ];
 
     protected static function booted(): void

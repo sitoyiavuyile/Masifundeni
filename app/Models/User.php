@@ -72,7 +72,7 @@ class User extends Authenticatable
     /** Enrolment records for this student */
     public function enrolments(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(Enrolment::class, 'user_id');
+        return $this->hasMany(Enrolment::class, 'student_id');
     }
 
     /** Courses this student is enrolled in */
@@ -87,5 +87,12 @@ class User extends Authenticatable
             'course_id'   // local key on enrolments
         );
     }
+    // Add to app/Models/User.php
+
+    public function courses(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Course::class, 'instructor_id');
+    }
+
 }
 

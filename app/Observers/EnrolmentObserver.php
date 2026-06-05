@@ -7,50 +7,16 @@ use Illuminate\Support\Facades\Log;
 
 class EnrolmentObserver
 {
-    /**
-     * Fired after a new enrolment is saved.
-     * Future: send welcome email to student, notify instructor, etc.
-     */
-    public function created(Enrolment $enrolment): void
+   public function updating(Enrolment $enrolment): void
     {
-        Log::info('Student enrolled', [
-            'student_id' => $enrolment->user_id,
-            'course_id'  => $enrolment->course_id,
-        ]);
-    }
-
-    /**
-     * Fired after an enrolment is updated.
-     * Future: dispatch GradePosted event when grade changes.
-     */
-    public function updated(Enrolment $enrolment): void
-    {
-        if ($enrolment->wasChanged('grade') && $enrolment->grade !== null) {
-            Log::info('Grade posted', [
-                'enrolment_id' => $enrolment->id,
-                'grade'        => $enrolment->grade,
-                'letter'       => $enrolment->letter_grade,
-            ]);
-            // Future: event(new GradePosted($enrolment));
+        // Auto-set completed_at when status changes to completed
+        if ($enrolment->isDirty('status') && $enrolment->status === 'completed') {
+            $enrolment->completed_at = now();
         }
 
-        if ($enrolment->wasChanged('status')) {
-            Log::info('Enrolment status changed', [
-                'enrolment_id' => $enrolment->id,
-                'from'         => $enrolment->getOriginal('status'),
-                'to'           => $enrolment->status,
-            ]);
+        // Clear completed_at if status is moved back
+        if ($enrolment->isDirty('status') && $enrolment->status !== 'completed') {
+            $enrolment->completed_at = null;
         }
-    }
-
-    /**
-     * Fired after an enrolment is deleted.
-     */
-    public function deleted(Enrolment $enrolment): void
-    {
-        Log::info('Student removed from course', [
-            'student_id' => $enrolment->user_id,
-            'course_id'  => $enrolment->course_id,
-        ]);
-    }
+    } 
 }

@@ -13,7 +13,7 @@ class CourseFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id'     => User::factory(),          // creates an instructor by default
+            'instructor_id'     => User::factory(),          // creates an instructor by default
             'title'       => $this->faker->words(4, true),
             'code'        => strtoupper($this->faker->unique()->bothify('??###')),
             'description' => $this->faker->paragraph(),
@@ -34,7 +34,7 @@ class CourseFactory extends Factory
 
     public function forInstructor(User $instructor): static
     {
-        return $this->state(['user_id' => $instructor->id]);
+        return $this->state(['instructor_id' => $instructor->id]);
     }
 }
 

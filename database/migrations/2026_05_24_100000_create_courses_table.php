@@ -9,17 +9,25 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('courses', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')          // instructor who owns the course
-                  ->constrained()
-                  ->cascadeOnDelete();
-            $table->string('title');
-            $table->string('code')->unique();      // e.g. CS101
-            $table->text('description')->nullable();
-            $table->enum('status', ['draft', 'published', 'archived'])->default('draft');
-            $table->unsignedSmallInteger('credits')->default(0);
-            $table->timestamps();
-        });
+        $table->id();
+
+        $table->foreignId('instructor_id')
+            ->constrained('users')
+            ->cascadeOnDelete();
+
+        $table->string('code')->unique();
+        $table->string('title');
+        $table->text('description')->nullable();
+
+        $table->integer('credits')->default(0);
+
+        $table->enum('status', ['draft', 'published', 'archived'])
+            ->default('draft');
+
+        $table->string('slug')->unique();
+
+        $table->timestamps();
+    });
     }
 
     public function down(): void
