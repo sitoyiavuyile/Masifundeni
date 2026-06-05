@@ -1,18 +1,16 @@
 <?php
+// app/Http/Controllers/Admin/CourseController.php
 
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\StoreCourseRequest;
-use App\Http\Requests\Admin\UpdateCourseRequest;
+use App\Http\Requests\Instructor\StoreCourseRequest;
+use App\Http\Requests\Instructor\UpdateCourseRequest;
 use App\Models\Course;
 use App\Models\User;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
 
 class CourseController extends Controller
 {
-    /** GET /admin/courses */
     public function index()
     {
         $courses = Course::with('instructor')->latest()->paginate(15);
@@ -45,7 +43,12 @@ class CourseController extends Controller
 
     public function update(UpdateCourseRequest $request, Course $course)
     {
-        $course->update($request->validated() + ['instructor_id' => $request->instructor_id]);
+        $course->update([
+            'instructor_id' => $request->instructor_id,
+            'title'         => $request->title,
+            'description'   => $request->description,
+            'status'        => $request->status,
+        ]);
         return redirect()->route('admin.courses.index')->with('success', 'Course updated.');
     }
 

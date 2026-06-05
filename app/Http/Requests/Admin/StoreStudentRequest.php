@@ -1,34 +1,27 @@
 <?php
+// app/Http/Requests/Admin/StoreStudentRequest.php
 
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreCourseRequest extends FormRequest
+class StoreStudentRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()->isAdmin();
+        return auth()->user()->isAdmin();
     }
 
     public function rules(): array
     {
         return [
-            'user_id'     => ['required', 'exists:users,id'],
-            'title'       => ['required', 'string', 'min:3', 'max:255'],
-            'code'        => ['required', 'string', 'max:10', 'unique:courses,code', 'regex:/^[A-Za-z]{2,4}\d{2,4}$/'],
-            'description' => ['nullable', 'string', 'max:2000'],
-            'status'      => ['required', 'in:draft,published,archived'],
-            'credits'     => ['required', 'integer', 'min:0', 'max:10'],
-        ];
-    }
-
-    public function messages(): array
-    {
-        return [
-            'user_id.exists' => 'The selected instructor does not exist.',
-            'code.regex'     => 'Course code must be 2-4 letters followed by 2-4 digits (e.g. CS101).',
-            'code.unique'    => 'This course code is already taken.',
+            'name'          => ['required', 'string', 'max:255'],
+            'email'         => ['required', 'email', 'unique:users,email'],
+            'password'      => ['required', 'string', 'min:8', 'confirmed'],
+            'phone'         => ['nullable', 'string', 'max:20'],
+            'date_of_birth' => ['nullable', 'date', 'before:-18 years'],
+            'address'       => ['nullable', 'string', 'max:500'],
+            'status'        => ['required', 'in:active,suspended,graduated'],
         ];
     }
 }

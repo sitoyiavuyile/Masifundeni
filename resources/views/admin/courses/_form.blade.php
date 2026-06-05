@@ -1,3 +1,17 @@
+{{-- resources/views/admin/courses/_form.blade.php --}}
+<div>
+    <label class="block text-sm font-medium text-gray-700">Instructor</label>
+    <select name="instructor_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+        @foreach($instructors as $instructor)
+            <option value="{{ $instructor->id }}"
+                {{ old('instructor_id', $course->instructor_id ?? '') == $instructor->id ? 'selected' : '' }}>
+                {{ $instructor->name }}
+            </option>
+        @endforeach
+    </select>
+    @error('instructor_id') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+</div>
+
 <div>
     <label class="block text-sm font-medium text-gray-700">Title</label>
     <input type="text" name="title"

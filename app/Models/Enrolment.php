@@ -46,5 +46,18 @@ class Enrolment extends Model
     {
         return $query->where('status', 'active');
     }
+    // Add to app/Models/Enrolment.php
+
+    public function getAverageScoreAttribute(): float
+    {
+        if ($this->grades->isEmpty()) return 0;
+
+        $totalScore    = $this->grades->sum('score');
+        $totalMaxScore = $this->grades->sum('max_score');
+
+        if ($totalMaxScore == 0) return 0;
+
+        return round(($totalScore / $totalMaxScore) * 100, 1);
+    }
    
 }

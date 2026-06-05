@@ -24,7 +24,7 @@ return new class extends Migration
         $table->enum('status', ['draft', 'published', 'archived'])
             ->default('draft');
 
-        $table->string('slug')->unique();
+        $table->string('slug')->unique()->nullable();
 
         $table->timestamps();
     });

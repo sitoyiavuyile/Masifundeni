@@ -1,4 +1,5 @@
 <?php
+// app/Http/Requests/Instructor/StoreCourseRequest.php
 
 namespace App\Http\Requests\Instructor;
 
@@ -14,9 +15,10 @@ class StoreCourseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'       => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'status'      => ['required', 'in:draft,published,archived'],
+            'title'         => ['required', 'string', 'max:255'],
+            'description'   => ['nullable', 'string'],
+            'status'        => ['required', 'in:draft,published,archived'],
+            'instructor_id' => ['nullable', 'exists:users,id'], // needed for admin
         ];
     }
 }

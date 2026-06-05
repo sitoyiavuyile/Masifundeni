@@ -1,8 +1,11 @@
 <?php
+// app/Http/Controllers/Student/CourseController.php
 
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+use App\Models\Course;
+use App\Models\Enrolment;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller
@@ -14,7 +17,6 @@ class CourseController extends Controller
             ->withCount('enrolments')
             ->paginate(12);
 
-        // Tag which ones the student is already enrolled in
         $enrolledIds = auth()->user()
             ->enrolments()
             ->pluck('course_id')
@@ -25,10 +27,8 @@ class CourseController extends Controller
 
     public function enrol(Request $request, Course $course)
     {
-        // Block enrolling in non-published courses
         abort_if($course->status !== 'published', 403);
 
-        // Prevent duplicate enrolment
         $exists = Enrolment::where('student_id', auth()->id())
             ->where('course_id', $course->id)
             ->exists();

@@ -1,8 +1,9 @@
+{{-- resources/views/admin/courses/index.blade.php --}}
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
-            <h2 class="text-xl font-semibold">My Courses</h2>
-            <a href="{{ route('instructor.courses.create') }}"
+            <h2 class="text-xl font-semibold">Courses</h2>
+            <a href="{{ route('admin.courses.create') }}"
                class="px-4 py-2 bg-indigo-600 text-white rounded-md text-sm">
                 New course
             </a>
@@ -19,6 +20,7 @@
                 <thead class="bg-gray-50">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Title</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Instructor</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Students</th>
                         <th class="px-6 py-3"></th>
@@ -28,24 +30,20 @@
                     @foreach($courses as $course)
                     <tr>
                         <td class="px-6 py-4 font-medium text-gray-900">{{ $course->title }}</td>
+                        <td class="px-6 py-4 text-sm text-gray-600">{{ $course->instructor->name }}</td>
                         <td class="px-6 py-4">
-                            <span class="px-2 py-1 text-xs rounded-full
-                                {{ $course->status === 'published' ? 'bg-green-100 text-green-800' : '' }}
-                                {{ $course->status === 'draft'     ? 'bg-yellow-100 text-yellow-800' : '' }}
-                                {{ $course->status === 'archived'  ? 'bg-gray-100 text-gray-800' : '' }}">
-                                {{ ucfirst($course->status) }}
-                            </span>
+                            <x-badge :status="$course->status"/>
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-600">
-                            {{ $course->enrolments_count ?? $course->enrolments->count() }}
+                            {{ $course->enrolments->count() }}
                         </td>
                         <td class="px-6 py-4 text-right space-x-2">
-                            <a href="{{ route('instructor.courses.show', $course) }}"
+                            <a href="{{ route('admin.courses.show', $course) }}"
                                class="text-sm text-indigo-600 hover:underline">View</a>
-                            <a href="{{ route('instructor.courses.edit', $course) }}"
+                            <a href="{{ route('admin.courses.edit', $course) }}"
                                class="text-sm text-yellow-600 hover:underline">Edit</a>
                             <form method="POST"
-                                  action="{{ route('instructor.courses.destroy', $course) }}"
+                                  action="{{ route('admin.courses.destroy', $course) }}"
                                   class="inline"
                                   onsubmit="return confirm('Delete this course?')">
                                 @csrf @method('DELETE')
