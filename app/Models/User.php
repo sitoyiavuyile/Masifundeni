@@ -27,9 +27,13 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password'          => 'hashed',
         ];
     }
+
+    // ──────────────────────────────────────────
+    // Role helpers (Member 1)
+    // ──────────────────────────────────────────
 
     public function isAdmin(): bool
     {
@@ -45,10 +49,43 @@ class User extends Authenticatable
     {
         return $this->role === 'student';
     }
-    // app/Models/User.php — add this method
 
-public function studentProfile(): \Illuminate\Database\Eloquent\Relations\HasOne
-{
-    return $this->hasOne(StudentProfile::class);
+    // ──────────────────────────────────────────
+    // Relationships — Member 1
+    // ──────────────────────────────────────────
+
+    public function studentProfile(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(StudentProfile::class);
+    }
+
+    // ──────────────────────────────────────────
+    // Relationships — Member 2 additions
+    // ──────────────────────────────────────────
+
+    /** Courses this user teaches (instructor) */
+    public function taughtCourses(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Course::class, 'user_id');
+    }
+
+    /** Enrolment records for this student */
+    public function enrolments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Enrolment::class, 'user_id');
+    }
+
+    /** Courses this student is enrolled in */
+    public function enrolledCourses(): \Illuminate\Database\Eloquent\Relations\HasManyThrough
+    {
+        return $this->hasManyThrough(
+            Course::class,
+            Enrolment::class,
+            'user_id',    // FK on enrolments
+            'id',         // FK on courses
+            'id',         // local key on users
+            'course_id'   // local key on enrolments
+        );
+    }
 }
-}
+

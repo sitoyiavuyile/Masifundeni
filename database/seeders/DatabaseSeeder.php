@@ -10,13 +10,13 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // Create Spatie roles
+        // ── Spatie roles ───────────────────────────────────────────────────
         $roles = ['admin', 'instructor', 'student'];
         foreach ($roles as $role) {
             Role::firstOrCreate(['name' => $role]);
         }
 
-        // Admin
+        // ── Admin ──────────────────────────────────────────────────────────
         $admin = User::factory()->create([
             'name'  => 'Admin User',
             'email' => 'admin@sms.test',
@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
         ]);
         $admin->assignRole('admin');
 
-        // Instructor
+        // ── Instructor ────────────────────────────────────────────────────
         $instructor = User::factory()->create([
             'name'  => 'Jane Instructor',
             'email' => 'instructor@sms.test',
@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
         ]);
         $instructor->assignRole('instructor');
 
-        // Student
+        // ── Students ──────────────────────────────────────────────────────
         $student = User::factory()->create([
             'name'  => 'John Student',
             'email' => 'student@sms.test',
@@ -43,7 +43,8 @@ class DatabaseSeeder extends Seeder
         User::factory()->count(20)->student()->create()->each(function ($user) {
             $user->assignRole('student');
         });
- 
+
+        // ── Member 2: courses + enrolments ────────────────────────────────
+        $this->call(CourseSeeder::class);
     }
-    
 }
