@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreStudentRequest;
 use App\Http\Requests\Admin\UpdateStudentRequest;
@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 
 class StudentController extends Controller
 {
+    use AuthorizesRequests;
     public function index()
     {
         $students = User::query()

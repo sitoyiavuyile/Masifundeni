@@ -1,3 +1,4 @@
+{{-- resources/views/instructor/courses/_form.blade.php --}}
 <div>
     <label class="block text-sm font-medium text-gray-700">Title</label>
     <input type="text" name="title"
@@ -12,14 +13,13 @@
               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">{{ old('description', $course->description ?? '') }}</textarea>
 </div>
 
-{{-- Inside admin courses _form.blade.php, add instructor selector --}}
 <div>
-    <label class="block text-sm font-medium text-gray-700">Instructor</label>
-    <select name="instructor_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
-        @foreach($instructors as $instructor)
-            <option value="{{ $instructor->id }}"
-                {{ old('instructor_id', $course->instructor_id ?? '') == $instructor->id ? 'selected' : '' }}>
-                {{ $instructor->name }}
+    <label class="block text-sm font-medium text-gray-700">Status</label>
+    <select name="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+        @foreach(['draft', 'published', 'archived'] as $option)
+            <option value="{{ $option }}"
+                {{ old('status', $course->status ?? 'draft') === $option ? 'selected' : '' }}>
+                {{ ucfirst($option) }}
             </option>
         @endforeach
     </select>

@@ -25,17 +25,22 @@
            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
     @error('password') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
 </div>
+
 <div>
     <label class="block text-sm font-medium text-gray-700">Confirm password</label>
     <input type="password" name="password_confirmation"
            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
 </div>
 
+@php
+    $profile = $student->studentProfile ?? null;
+@endphp
+
 {{-- Phone --}}
 <div>
     <label class="block text-sm font-medium text-gray-700">Phone</label>
     <input type="text" name="phone"
-           value="{{ old('phone', $student->studentProfile->phone ?? '') }}"
+           value="{{ old('phone', $profile->phone ?? '') }}"
            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
 </div>
 
@@ -43,7 +48,7 @@
 <div>
     <label class="block text-sm font-medium text-gray-700">Date of birth</label>
     <input type="date" name="date_of_birth"
-           value="{{ old('date_of_birth', $student->studentProfile->date_of_birth?->format('Y-m-d') ?? '') }}"
+           value="{{ old('date_of_birth', optional($profile->date_of_birth ?? null)?->format('Y-m-d')) }}"
            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
     @error('date_of_birth') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
 </div>
@@ -52,7 +57,7 @@
 <div>
     <label class="block text-sm font-medium text-gray-700">Address</label>
     <textarea name="address" rows="2"
-              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">{{ old('address', $student->studentProfile->address ?? '') }}</textarea>
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">{{ old('address', $profile->address ?? '') }}</textarea>
 </div>
 
 {{-- Status --}}
@@ -61,7 +66,7 @@
     <select name="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
         @foreach(['active', 'suspended', 'graduated'] as $option)
             <option value="{{ $option }}"
-                {{ old('status', $student->studentProfile->status ?? 'active') === $option ? 'selected' : '' }}>
+                {{ old('status', $profile->status ?? 'active') === $option ? 'selected' : '' }}>
                 {{ ucfirst($option) }}
             </option>
         @endforeach
