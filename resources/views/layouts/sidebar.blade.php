@@ -49,9 +49,6 @@
 
     {{-- Profile link at bottom --}}
     <div class="px-4 py-4 border-t border-gray-700">
-        <a href="{{ route('profile.edit') }}"
-           class="block text-sm text-gray-400 hover:text-white transition">
-            ⚙ Profile settings
-        </a>
+        {{-- Profile page not implemented yet --}}
     </div>
 </aside>
