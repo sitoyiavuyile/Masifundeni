@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Instructor;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Instructor\StoreCourseRequest;
 use App\Http\Requests\Instructor\UpdateCourseRequest;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Models\Course;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -12,6 +13,7 @@ use Illuminate\View\View;
 class CourseController extends Controller
 {
     /** GET /instructor/courses */
+    use AuthorizesRequests;
     public function index()
     {
         $courses = Course::forInstructor(auth()->id())
