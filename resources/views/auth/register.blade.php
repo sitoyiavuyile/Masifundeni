@@ -24,9 +24,13 @@
 <div class="min-h-screen flex">
 
     {{-- LEFT PANEL --}}
-    <div class="hidden lg:flex lg:w-5/12 xl:w-2/5 bg-slate-900 dark:bg-slate-950 flex-col justify-between p-10 relative overflow-hidden">
+    <div class="hidden lg:flex lg:w-5/12 xl:w-2/5 flex-col justify-between p-10 relative overflow-hidden"
+         style="background-image: url('/images/working-students.jpg'); background-size: cover; background-position: center;">
 
-        <div class="relative z-10">
+        {{-- Dark overlay --}}
+        <div class="absolute inset-0" style="background: linear-gradient(135deg, rgba(15,23,42,0.92) 0%, rgba(30,58,138,0.85) 50%, rgba(15,23,42,0.95) 100%);"></div>
+
+        <div class="relative z-20">
             <div class="flex items-center gap-3">
                 <div class="flex items-center justify-center w-10 h-10 rounded-xl bg-blue-600">
                     <span class="text-white font-bold">M</span>
@@ -37,19 +41,19 @@
             </div>
         </div>
 
-        <div class="relative z-10 space-y-6">
+        <div class="relative z-20 space-y-6">
             <h1 class="text-3xl font-bold text-white">
                 Join Masifundeni today.
             </h1>
 
-            <p class="text-sm text-slate-400">
-                Create your account as a student or instructor.
+            <p class="text-sm text-slate-300">
+                Create your account as a student or instructor and start your learning journey.
             </p>
         </div>
 
-        <div class="relative z-10">
-            <p class="text-xs text-slate-600">
-                © {{ date('Y') }} {{ config('app.name') }}
+        <div class="relative z-20">
+            <p class="text-xs text-slate-500">
+                © {{ date('Y') }} {{ config('app.name', 'Masifundeni') }}
             </p>
         </div>
     </div>
