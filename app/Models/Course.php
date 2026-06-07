@@ -27,7 +27,12 @@ class Course extends Model
     {
         static::creating(function (Course $course) {
             $course->slug = Str::slug($course->title) . '-' . uniqid();
+            if (empty($course->code)) {
+            $course->code = strtoupper(Str::substr(Str::slug($course->title), 0, 3))
+                . rand(100, 999);
+        }
         });
+        
     }
 
     public function instructor(): \Illuminate\Database\Eloquent\Relations\BelongsTo
