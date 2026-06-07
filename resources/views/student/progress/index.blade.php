@@ -1,67 +1,114 @@
 {{-- resources/views/student/progress/index.blade.php --}}
 <x-app-layout>
+
     <x-slot name="header">
-        <h2 class="text-xl font-semibold text-gray-800">My Progress</h2>
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">My Progress</h1>
+                <p class="page-subtitle">Track your performance across enrolled courses</p>
+            </div>
+        </div>
     </x-slot>
 
-    <div class="space-y-6">
-        @forelse($enrolments as $enrolment)
-        <div class="bg-white rounded-lg shadow overflow-hidden">
+    <div class="px-4 sm:px-6 lg:px-8 pb-10 space-y-6">
 
-            <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-                <div>
-                    <h3 class="font-semibold text-gray-900">{{ $enrolment->course->title }}</h3>
-                    <p class="text-sm text-gray-500">{{ $enrolment->course->instructor->name }}</p>
+        @forelse($enrolments as $enrolment)
+
+            <div class="card overflow-hidden">
+
+                {{-- Header --}}
+                <div class="card-header flex items-center justify-between">
+
+                    <div>
+                        <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">
+                            {{ $enrolment->course->title }}
+                        </h3>
+
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                            {{ $enrolment->course->instructor->name }}
+                        </p>
+                    </div>
+
+                    <div class="text-right space-y-1">
+                        <x-badge :status="$enrolment->status"/>
+
+                        <p class="text-sm font-semibold text-slate-700 dark:text-slate-200">
+                            Overall: {{ $enrolment->average_score }}%
+                        </p>
+                    </div>
+
                 </div>
-                <div class="text-right">
-                    <x-badge :status="$enrolment->status"/>
-                    <p class="text-sm font-semibold mt-1 text-gray-700">
-                        Overall: {{ $enrolment->average_score }}%
-                    </p>
+
+                {{-- Body --}}
+                <div class="card-body p-0">
+
+                    @if($enrolment->grades->isNotEmpty())
+
+                        <div class="table-wrapper rounded-none border-0">
+
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Assessment</th>
+                                        <th>Score</th>
+                                        <th>Out of</th>
+                                        <th>%</th>
+                                        <th>Grade</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @foreach($enrolment->grades as $grade)
+                                        <tr>
+                                            <td class="text-slate-900 dark:text-slate-100">
+                                                {{ $grade->label }}
+                                            </td>
+
+                                            <td>{{ $grade->score }}</td>
+                                            <td>{{ $grade->max_score }}</td>
+                                            <td>{{ $grade->percentage }}%</td>
+
+                                            <td>
+                                                <span class="font-semibold
+                                                    {{ in_array($grade->letter_grade, ['A','B']) ? 'text-green-500 dark:text-green-400' : '' }}
+                                                    {{ $grade->letter_grade === 'C' ? 'text-yellow-500 dark:text-yellow-400' : '' }}
+                                                    {{ in_array($grade->letter_grade, ['D','F']) ? 'text-red-500 dark:text-red-400' : '' }}">
+                                                    {{ $grade->letter_grade }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    @else
+                        <div class="px-6 py-5 text-sm text-slate-500 dark:text-slate-400">
+                            No grades recorded yet.
+                        </div>
+                    @endif
+
                 </div>
             </div>
 
-            @if($enrolment->grades->isNotEmpty())
-            <table class="min-w-full divide-y divide-gray-100">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Assessment</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Score</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Out of</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">%</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Grade</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-100">
-                    @foreach($enrolment->grades as $grade)
-                    <tr>
-                        <td class="px-6 py-3 text-sm text-gray-900">{{ $grade->label }}</td>
-                        <td class="px-6 py-3 text-sm text-gray-700">{{ $grade->score }}</td>
-                        <td class="px-6 py-3 text-sm text-gray-700">{{ $grade->max_score }}</td>
-                        <td class="px-6 py-3 text-sm text-gray-700">{{ $grade->percentage }}%</td>
-                        <td class="px-6 py-3">
-                            <span class="font-bold text-sm
-                                {{ in_array($grade->letter_grade, ['A','B']) ? 'text-green-600' : '' }}
-                                {{ $grade->letter_grade === 'C' ? 'text-yellow-600' : '' }}
-                                {{ in_array($grade->letter_grade, ['D','F']) ? 'text-red-600' : '' }}">
-                                {{ $grade->letter_grade }}
-                            </span>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            @else
-            <p class="px-6 py-4 text-sm text-gray-500">No grades recorded yet.</p>
-            @endif
-
-        </div>
         @empty
-        <div class="bg-white rounded-lg shadow px-6 py-8 text-center text-gray-500">
-            You haven't enrolled in any courses.
-            <a href="{{ route('student.courses.index') }}"
-               class="text-indigo-600 hover:underline ml-1">Browse courses</a>
-        </div>
+
+            <div class="card">
+                <div class="card-body text-center py-10 text-slate-500 dark:text-slate-400">
+                    You haven't enrolled in any courses.
+
+                    <div class="mt-3">
+                        <a href="{{ route('student.courses.index') }}"
+                           class="text-blue-600 dark:text-blue-400 hover:underline">
+                            Browse courses
+                        </a>
+                    </div>
+                </div>
+            </div>
+
         @endforelse
+
     </div>
+
 </x-app-layout>

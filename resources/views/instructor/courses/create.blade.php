@@ -1,63 +1,36 @@
 <x-app-layout>
 
     <x-slot name="header">
-        <div class="flex items-center justify-between">
-            <h2 class="text-2xl font-bold text-gray-800">
-             Create Course
-            </h2>
-
-            <span class="text-xs text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-                Instructor Panel
-            </span>
-        </div>
+        <h2 class="text-xl font-semibold text-on-surface dark:text-inverse-on-surface">
+            Create Course
+        </h2>
     </x-slot>
 
-    <div class="py-10 bg-gray-50 min-h-screen">
+    <div class="py-8 max-w-2xl mx-auto px-4">
 
-        <div class="max-w-2xl mx-auto px-4">
+        <form method="POST"
+              action="{{ route('instructor.courses.store') }}"
+              class="space-y-6">
 
-            {{-- CARD --}}
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            @csrf
 
-                {{-- HEADER --}}
-                <div class="bg-gradient-to-r from-indigo-500 to-purple-500 px-6 py-5">
-                    <h3 class="text-white font-semibold text-lg">
-                        New Course
-                    </h3>
-                    <p class="text-indigo-100 text-sm">
-                        Fill in the details to publish a new course
-                    </p>
-                </div>
+            @include('instructor.courses._form')
 
-                {{-- FORM --}}
-                <form method="POST"
-                      action="{{ route('instructor.courses.store') }}"
-                      class="p-6 space-y-6">
+            <div class="flex gap-3">
 
-                    @csrf
+                <button type="submit"
+                        class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-md text-sm">
+                    Create Course
+                </button>
 
-                    @include('instructor.courses._form')
-
-                    {{-- ACTIONS --}}
-                    <div class="flex items-center justify-between pt-4">
-
-                        <a href="{{ route('instructor.courses.index') }}"
-                           class="text-sm text-gray-500 hover:text-gray-700 transition">
-                            Cancel
-                        </a>
-
-                        <button type="submit"
-                                class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-xl shadow-sm transition">
-                            Create Course
-                        </button>
-
-                    </div>
-
-                </form>
+                <a href="{{ route('instructor.courses.index') }}"
+                   class="px-4 py-2 bg-surface-container text-on-surface-variant dark:bg-surface-container-high dark:text-inverse-on-surface rounded-md text-sm hover:bg-surface-container-highest transition">
+                    Cancel
+                </a>
 
             </div>
 
-        </div>
+        </form>
 
     </div>
 

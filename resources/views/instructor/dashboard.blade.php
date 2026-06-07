@@ -3,152 +3,147 @@
 
     <x-slot name="header">
         <div class="flex items-center justify-between">
-            <h2 class="text-2xl font-bold text-gray-800">
+            <h2 class="text-xl font-semibold text-gray-800 dark:text-white">
                 Instructor Dashboard
             </h2>
 
-            <span class="text-xs text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+            <span class="text-xs text-gray-500 dark:text-slate-400 bg-gray-100 dark:bg-slate-800 px-3 py-1 rounded-full">
                 Overview
             </span>
         </div>
     </x-slot>
 
-    <div class="py-10 bg-gray-50 min-h-screen">
+    <div class="py-8 max-w-7xl mx-auto px-4 space-y-8">
 
-        <div class="max-w-7xl mx-auto px-4">
+        {{-- STATS --}}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
-            {{-- STATS --}}
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
-
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-                    <p class="text-sm text-gray-500">My Courses</p>
-                    <h3 class="text-2xl font-bold text-indigo-600 mt-1">
-                        {{ $stats['total_courses'] }}
-                    </h3>
-                </div>
-
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-                    <p class="text-sm text-gray-500">Published</p>
-                    <h3 class="text-2xl font-bold text-green-600 mt-1">
-                        {{ $stats['published'] }}
-                    </h3>
-                </div>
-
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-                    <p class="text-sm text-gray-500">Total Students</p>
-                    <h3 class="text-2xl font-bold text-yellow-500 mt-1">
-                        {{ $stats['total_students'] }}
-                    </h3>
-                </div>
-
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-                    <p class="text-sm text-gray-500">Pending Approvals</p>
-                    <h3 class="text-2xl font-bold text-red-500 mt-1">
-                        {{ $stats['pending_approvals'] }}
-                    </h3>
-                </div>
-
+            <div class="bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-700 rounded-lg shadow p-6">
+                <p class="text-sm text-gray-500 dark:text-slate-400">My Courses</p>
+                <h3 class="text-2xl font-semibold text-indigo-600 dark:text-indigo-400 mt-1">
+                    {{ $stats['total_courses'] }}
+                </h3>
             </div>
 
-            {{-- MAIN GRID --}}
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-700 rounded-lg shadow p-6">
+                <p class="text-sm text-gray-500 dark:text-slate-400">Published</p>
+                <h3 class="text-2xl font-semibold text-green-600 dark:text-green-400 mt-1">
+                    {{ $stats['published'] }}
+                </h3>
+            </div>
 
-                {{-- MY COURSES --}}
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-700 rounded-lg shadow p-6">
+                <p class="text-sm text-gray-500 dark:text-slate-400">Total Students</p>
+                <h3 class="text-2xl font-semibold text-yellow-500 dark:text-yellow-400 mt-1">
+                    {{ $stats['total_students'] }}
+                </h3>
+            </div>
 
-                    <div class="px-6 py-4 bg-gray-50 border-b flex justify-between items-center">
-                        <h3 class="font-semibold text-gray-700">
-                            My Courses
-                        </h3>
+            <div class="bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-700 rounded-lg shadow p-6">
+                <p class="text-sm text-gray-500 dark:text-slate-400">Pending Approvals</p>
+                <h3 class="text-2xl font-semibold text-red-500 dark:text-red-400 mt-1">
+                    {{ $stats['pending_approvals'] }}
+                </h3>
+            </div>
 
-                        <a href="{{ route('instructor.courses.create') }}"
-                           class="text-sm text-indigo-600 hover:text-indigo-800 transition">
-                            + New Course
-                        </a>
-                    </div>
+        </div>
 
-                    <ul class="divide-y divide-gray-100">
+        {{-- MAIN GRID --}}
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-                        @forelse($courses as $course)
-                            <li class="px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition">
+            {{-- MY COURSES --}}
+            <div class="bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-700 rounded-lg shadow overflow-hidden">
 
-                                <div>
-                                    <a href="{{ route('instructor.courses.show', $course) }}"
-                                       class="text-sm font-semibold text-gray-900 hover:text-indigo-600 transition">
-                                        {{ $course->title }}
-                                    </a>
+                <div class="px-6 py-4 border-b border-gray-100 dark:border-slate-700 flex justify-between items-center">
+                    <h3 class="font-semibold text-gray-700 dark:text-white">
+                        My Courses
+                    </h3>
 
-                                    <p class="text-xs text-gray-500 mt-1">
-                                        {{ $course->enrolments_count }} students
-                                    </p>
-                                </div>
-
-                                <x-badge :status="$course->status"/>
-
-                            </li>
-                        @empty
-
-                            <li class="px-6 py-6 text-center text-gray-500 text-sm">
-                                No courses yet. Create your first course!
-                            </li>
-
-                        @endforelse
-
-                    </ul>
-
+                    <a href="{{ route('instructor.courses.create') }}"
+                       class="text-sm text-indigo-600 dark:text-indigo-400 hover:underline">
+                        + New Course
+                    </a>
                 </div>
 
-                {{-- PENDING ENROLMENTS --}}
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <ul class="divide-y divide-gray-100 dark:divide-slate-700">
 
-                    <div class="px-6 py-4 bg-gray-50 border-b">
-                        <h3 class="font-semibold text-gray-700">
-                            Pending Approvals
-                        </h3>
-                    </div>
+                    @forelse($courses as $course)
+                        <li class="px-6 py-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-slate-800 transition">
 
-                    <ul class="divide-y divide-gray-100">
+                            <div>
+                                <a href="{{ route('instructor.courses.show', $course) }}"
+                                   class="text-sm font-medium text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400">
+                                    {{ $course->title }}
+                                </a>
 
-                        @forelse($pendingEnrolments as $enrolment)
-                            <li class="px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition">
+                                <p class="text-xs text-gray-500 dark:text-slate-400 mt-1">
+                                    {{ $course->enrolments_count }} students
+                                </p>
+                            </div>
 
-                                <div>
-                                    <p class="text-sm font-semibold text-gray-900">
-                                        {{ $enrolment->student->name }}
-                                    </p>
+                            <x-badge :status="$course->status"/>
 
-                                    <p class="text-xs text-gray-500">
-                                        {{ $enrolment->course->title }}
-                                    </p>
-                                </div>
+                        </li>
+                    @empty
 
-                                <form method="POST"
-                                      action="{{ route('instructor.enrolments.update', $enrolment) }}">
+                        <li class="px-6 py-6 text-center text-sm text-gray-500 dark:text-slate-400">
+                            No courses yet. Create your first course.
+                        </li>
 
-                                    @csrf
-                                    @method('PUT')
+                    @endforelse
 
-                                    <input type="hidden" name="status" value="active">
+                </ul>
+            </div>
 
-                                    <button class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-xs rounded-full transition">
-                                        Approve
-                                    </button>
+            {{-- PENDING ENROLMENTS --}}
+            <div class="bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-700 rounded-lg shadow overflow-hidden">
 
-                                </form>
-
-                            </li>
-
-                        @empty
-
-                            <li class="px-6 py-6 text-center text-gray-500 text-sm">
-                                No pending approvals
-                            </li>
-
-                        @endforelse
-
-                    </ul>
-
+                <div class="px-6 py-4 border-b border-gray-100 dark:border-slate-700">
+                    <h3 class="font-semibold text-gray-700 dark:text-white">
+                        Pending Approvals
+                    </h3>
                 </div>
+
+                <ul class="divide-y divide-gray-100 dark:divide-slate-700">
+
+                    @forelse($pendingEnrolments as $enrolment)
+                        <li class="px-6 py-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-slate-800 transition">
+
+                            <div>
+                                <p class="text-sm font-medium text-gray-900 dark:text-white">
+                                    {{ $enrolment->student->name }}
+                                </p>
+
+                                <p class="text-xs text-gray-500 dark:text-slate-400">
+                                    {{ $enrolment->course->title }}
+                                </p>
+                            </div>
+
+                            <form method="POST"
+                                  action="{{ route('instructor.enrolments.update', $enrolment) }}">
+
+                                @csrf
+                                @method('PUT')
+
+                                <input type="hidden" name="status" value="active">
+
+                                <button class="px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-xs rounded-md transition">
+                                    Approve
+                                </button>
+
+                            </form>
+
+                        </li>
+
+                    @empty
+
+                        <li class="px-6 py-6 text-center text-sm text-gray-500 dark:text-slate-400">
+                            No pending approvals
+                        </li>
+
+                    @endforelse
+
+                </ul>
 
             </div>
 

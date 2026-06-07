@@ -1,134 +1,151 @@
 {{-- Student Form (Create/Edit) --}}
 
-<div class="space-y-6">
+@php
+    $profile = $student->studentProfile ?? null;
+@endphp
 
-    {{-- NAME --}}
-    <div>
-        <label class="block text-sm font-semibold text-gray-700 mb-1">
-            Name
+<div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+
+    {{-- Name --}}
+    <div class="sm:col-span-2 md:col-span-1">
+        <label for="name" class="form-label">
+            Full name <span class="text-red-500">*</span>
         </label>
 
-        <input type="text"
-               name="name"
-               value="{{ old('name', $student->name ?? '') }}"
-               placeholder="Enter full name"
-               class="w-full rounded-xl border-gray-200 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-100 transition p-2">
+        <input
+            type="text"
+            id="name"
+            name="name"
+            value="{{ old('name', $student->name ?? '') }}"
+            class="form-input @error('name') border-red-400 @enderror"
+            required
+        >
 
         @error('name')
-            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+            <p class="form-error">{{ $message }}</p>
         @enderror
     </div>
 
-    {{-- EMAIL --}}
+    {{-- Email --}}
     <div>
-        <label class="block text-sm font-semibold text-gray-700 mb-1">
-            Email
+        <label for="email" class="form-label">
+            Email <span class="text-red-500">*</span>
         </label>
 
-        <input type="email"
-               name="email"
-               value="{{ old('email', $student->email ?? '') }}"
-               placeholder="student@email.com"
-               class="w-full rounded-xl border-gray-200 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-100 transition p-2">
+        <input
+            type="email"
+            id="email"
+            name="email"
+            value="{{ old('email', $student->email ?? '') }}"
+            class="form-input @error('email') border-red-400 @enderror"
+            required
+        >
 
         @error('email')
-            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+            <p class="form-error">{{ $message }}</p>
         @enderror
     </div>
 
-    {{-- PASSWORD --}}
+    {{-- Password --}}
     <div>
-        <label class="block text-sm font-semibold text-gray-700 mb-1">
+        <label for="password" class="form-label">
             Password
-            <span class="text-xs text-gray-400 font-normal">
-                {{ isset($student) ? '(leave blank to keep current)' : '' }}
-            </span>
+            @isset($student)
+                <span class="text-xs text-slate-400">(leave blank to keep current)</span>
+            @else
+                <span class="text-red-500">*</span>
+            @endisset
         </label>
 
-        <input type="password"
-               name="password"
-               placeholder="Enter password"
-               class="w-full rounded-xl border-gray-200 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-100 transition p-2">
+        <input
+            type="password"
+            id="password"
+            name="password"
+            class="form-input @error('password') border-red-400 @enderror"
+            @if(!isset($student)) required @endif
+        >
 
         @error('password')
-            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+            <p class="form-error">{{ $message }}</p>
         @enderror
     </div>
 
-    {{-- CONFIRM PASSWORD --}}
+    {{-- Confirm Password --}}
     <div>
-        <label class="block text-sm font-semibold text-gray-700 mb-1">
-            Confirm Password
+        <label for="password_confirmation" class="form-label">
+            Confirm password
         </label>
 
-        <input type="password"
-               name="password_confirmation"
-               placeholder="Confirm password"
-               class="w-full rounded-xl border-gray-200 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-100 transition p-2">
+        <input
+            type="password"
+            id="password_confirmation"
+            name="password_confirmation"
+            class="form-input"
+        >
     </div>
 
-    @php
-        $profile = $student->studentProfile ?? null;
-    @endphp
-
-    {{-- PHONE --}}
+    {{-- Phone --}}
     <div>
-        <label class="block text-sm font-semibold text-gray-700 mb-1">
-            Phone
-        </label>
+        <label for="phone" class="form-label">Phone</label>
 
-        <input type="text"
-               name="phone"
-               value="{{ old('phone', $profile->phone ?? '') }}"
-               placeholder="e.g. 071 234 5678"
-               class="w-full rounded-xl border-gray-200 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-100 transition p-2">
+        <input
+            type="tel"
+            id="phone"
+            name="phone"
+            value="{{ old('phone', $profile->phone ?? '') }}"
+            class="form-input"
+            placeholder="+27 71 000 0000"
+        >
     </div>
 
-    {{-- DATE OF BIRTH --}}
+    {{-- Date of Birth --}}
     <div>
-        <label class="block text-sm font-semibold text-gray-700 mb-1">
-            Date of Birth
-        </label>
+        <label for="date_of_birth" class="form-label">Date of birth</label>
 
-        <input type="date"
-               name="date_of_birth"
-               value="{{ old('date_of_birth', optional($profile->date_of_birth ?? null)?->format('Y-m-d')) }}"
-               class="w-full rounded-xl border-gray-200 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-100 transition p-2">
+        <input
+            type="date"
+            id="date_of_birth"
+            name="date_of_birth"
+            value="{{ old('date_of_birth', optional($profile?->date_of_birth)->format('Y-m-d')) }}"
+            class="form-input @error('date_of_birth') border-red-400 @enderror"
+        >
 
         @error('date_of_birth')
-            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+            <p class="form-error">{{ $message }}</p>
         @enderror
     </div>
 
-    {{-- ADDRESS --}}
+    {{-- Status --}}
     <div>
-        <label class="block text-sm font-semibold text-gray-700 mb-1">
-            Address
+        <label for="status" class="form-label">
+            Status <span class="text-red-500">*</span>
         </label>
 
-        <textarea name="address"
-                  rows="2"
-                  placeholder="Enter student address"
-                  class="w-full rounded-xl border-gray-200 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-100 transition p-2">{{ old('address', $profile->address ?? '') }}</textarea>
-    </div>
-
-    {{-- STATUS --}}
-    <div>
-        <label class="block text-sm font-semibold text-gray-700 mb-1">
-            Status
-        </label>
-
-        <select name="status"
-                class="w-full rounded-xl border-gray-200 bg-white shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-100 transition p-2">
-
-            @foreach(['active', 'suspended', 'graduated'] as $option)
-                <option value="{{ $option }}"
-                    {{ old('status', $profile->status ?? 'active') === $option ? 'selected' : '' }}>
-                    {{ ucfirst($option) }}
+        <select
+            id="status"
+            name="status"
+            class="form-select"
+            required
+        >
+            @foreach(['active' => 'Active', 'suspended' => 'Suspended', 'graduated' => 'Graduated'] as $val => $label)
+                <option value="{{ $val }}"
+                    {{ old('status', $profile->status ?? 'active') === $val ? 'selected' : '' }}>
+                    {{ $label }}
                 </option>
             @endforeach
-
         </select>
+    </div>
+
+    {{-- Address --}}
+    <div class="sm:col-span-2">
+        <label for="address" class="form-label">Address</label>
+
+        <textarea
+            id="address"
+            name="address"
+            rows="3"
+            class="form-input resize-none"
+        >{{ old('address', $profile->address ?? '') }}</textarea>
     </div>
 
 </div>
