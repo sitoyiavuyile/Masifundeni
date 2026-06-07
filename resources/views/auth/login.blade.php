@@ -25,12 +25,15 @@
 
     {{-- ── Left branding panel ──────────────────────────────────────── --}}
     <div class="hidden lg:flex lg:w-5/12 xl:w-2/5
-                bg-slate-900 dark:bg-slate-950
                 flex-col justify-between p-10 relative overflow-hidden"
+         style="background-image: url('/images/working-students.jpg'); background-size: cover; background-position: center;"
          aria-hidden="true">
 
+        {{-- Dark overlay to keep text readable and on-brand --}}
+        <div class="absolute inset-0" style="background: linear-gradient(135deg, rgba(15,23,42,0.92) 0%, rgba(30,58,138,0.85) 50%, rgba(15,23,42,0.95) 100%);"></div>
+
         {{-- Subtle grid pattern --}}
-        <div class="absolute inset-0 opacity-[0.04]">
+        <div class="absolute inset-0 opacity-[0.04] z-10">
             <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                     <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
@@ -42,11 +45,11 @@
         </div>
 
         {{-- Blue accent blob --}}
-        <div class="absolute top-0 right-0 w-64 h-64 bg-blue-600/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-        <div class="absolute bottom-0 left-0 w-48 h-48 bg-indigo-600/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
+        <div class="absolute top-0 right-0 w-64 h-64 bg-blue-600/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 z-10"></div>
+        <div class="absolute bottom-0 left-0 w-48 h-48 bg-indigo-600/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 z-10"></div>
 
         {{-- Brand --}}
-        <div class="relative z-10">
+        <div class="relative z-20">
             <div class="flex items-center gap-3">
                 <div class="flex items-center justify-center w-10 h-10 rounded-xl bg-blue-600 shrink-0">
                     <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -58,12 +61,12 @@
         </div>
 
         {{-- Middle content --}}
-        <div class="relative z-10 space-y-8">
+        <div class="relative z-20 space-y-8">
             <div>
                 <h1 class="text-3xl font-bold text-white leading-snug">
                     Your academic<br>journey starts here.
                 </h1>
-                <p class="mt-3 text-sm text-slate-400 leading-relaxed">
+                <p class="mt-3 text-sm text-slate-300 leading-relaxed">
                     Access your courses, track progress, and manage your educational journey — all in one place.
                 </p>
             </div>
@@ -75,20 +78,20 @@
                     ['icon' => 'M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z', 'text' => 'Progress reports & grade tracking'],
                 ] as $feature)
                     <li class="flex items-center gap-3">
-                        <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-blue-600/20 shrink-0">
-                            <svg class="w-4 h-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                        <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-blue-600/30 shrink-0">
+                            <svg class="w-4 h-4 text-blue-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="{{ $feature['icon'] }}"/>
                             </svg>
                         </span>
-                        <span class="text-sm text-slate-400">{{ $feature['text'] }}</span>
+                        <span class="text-sm text-slate-300">{{ $feature['text'] }}</span>
                     </li>
                 @endforeach
             </ul>
         </div>
 
         {{-- Footer --}}
-        <div class="relative z-10">
-            <p class="text-xs text-slate-600">© {{ date('Y') }} {{ config('app.name') }}. All rights reserved.</p>
+        <div class="relative z-20">
+            <p class="text-xs text-slate-500">© {{ date('Y') }} {{ config('app.name', 'Masifundeni') }}. All rights reserved.</p>
         </div>
     </div>
 
